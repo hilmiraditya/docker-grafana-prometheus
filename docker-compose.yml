@@ -25,27 +25,27 @@ services:
       - '--web.enable-lifecycle'
     restart: unless-stopped
     ports:
-      - "9090:9090"
+      - '9090:9090'
     networks:
       - monitor-net
     labels:
       org.label-schema.group: "monitoring"
 
-  # alertmanager:
-  #   image: prom/alertmanager:v0.21.0
-  #   container_name: alertmanager
-  #   volumes:
-  #     - ./alertmanager:/etc/alertmanager
-  #   command:
-  #     - '--config.file=/etc/alertmanager/config.yml'
-  #     - '--storage.path=/alertmanager'
-  #   restart: unless-stopped
-  #   ports:
-  #     - "9093:9093"
-  #   networks:
-  #     - monitor-net
-  #   labels:
-  #     org.label-schema.group: "monitoring"
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    ports:
+      - '9093:9093'
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
 
   nodeexporter:
     image: prom/node-exporter:v1.0.1
@@ -91,12 +91,23 @@ services:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=ApotikApotik
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  pushgateway:
+    image: prom/pushgateway:v1.3.0
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - '9091:9091'
     networks:
       - monitor-net
     labels:
