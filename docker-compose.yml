@@ -4,10 +4,6 @@ networks:
   monitor-net:
     driver: bridge
 
-volumes:
-    prometheus_data: {}
-    grafana_data: {}
-
 services:
 
   prometheus:
@@ -15,7 +11,7 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
+      - ./prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -88,7 +84,7 @@ services:
     image: grafana/grafana:7.3.4
     container_name: grafana
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
