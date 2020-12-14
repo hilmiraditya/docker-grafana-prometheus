@@ -20,7 +20,7 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-      - 'chown -R /prometheus'
+      - 'chown -R  root:root /prometheus'
     restart: unless-stopped
     ports:
       - '9090:9090'
