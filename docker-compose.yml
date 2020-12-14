@@ -14,8 +14,6 @@ services:
       - ./prometheus_data:/prometheus
     user: "0"
     command:
-      - 'chown -R  root:root /prometheus'
-      - 'chown -R  root:root /etc/prometheus'
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
